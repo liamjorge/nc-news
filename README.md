@@ -33,6 +33,12 @@ PGDATABASE=nc_news_test
 PGDATABASE=nc_news
 ```
 
+### Setting up databases
+
+```
+npm run setup-dbs
+```
+
 ## Running the tests
 
 to do
