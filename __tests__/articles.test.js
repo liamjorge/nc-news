@@ -10,6 +10,41 @@ afterAll(() => {
   return db.end();
 });
 
+describe("GET /api/articles", () => {
+  test("status 200: with an array of article objects, each with the correct keys and values", () => {
+    return request(app)
+      .get("/api/articles")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.articles).toBeInstanceOf(Array);
+        expect(body.articles).toHaveLength(12);
+        body.articles.forEach((article) => {
+          expect(article).toMatchObject({
+            article_id: expect.any(Number),
+            title: expect.any(String),
+            topic: expect.any(String),
+            author: expect.any(String),
+            body: expect.any(String),
+            created_at: expect.stringMatching(
+              /\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}[A-Z]$/
+            ),
+            votes: expect.any(Number),
+            comment_count: expect.any(Number),
+          });
+        });
+      });
+  });
+
+  test("status 404: when endpoint is misspelled", () => {
+    return request(app)
+      .get("/api/artickles")
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toEqual("Route not found");
+      });
+  });
+});
+
 describe("GET /api/articles/:article_id", () => {
   test("status 200: returns an article object, with the correct keys and values (when comment_count>0)", () => {
     const article_id = 1;

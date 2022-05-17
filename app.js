@@ -1,6 +1,10 @@
 const express = require("express");
 const { getTopics } = require("./controllers/topics");
-const { getArticleById, patchArticleVotes } = require("./controllers/articles");
+const {
+  getArticles,
+  getArticleById,
+  patchArticleVotes,
+} = require("./controllers/articles");
 const {
   handleRouteNotFound,
   handlePsqlErrors,
@@ -16,6 +20,7 @@ app.use(express.json());
 app.get("/api/topics", getTopics);
 
 // articles
+app.get("/api/articles", getArticles);
 app.get("/api/articles/:article_id", getArticleById);
 app.patch("/api/articles/:article_id", patchArticleVotes);
 

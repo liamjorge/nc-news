@@ -1,5 +1,13 @@
 const db = require("../db/connection");
 
+exports.selectArticles = () => {
+  const queryText = `SELECT articles.*, COUNT(comments.article_id)::INT AS comment_count
+    FROM articles
+    LEFT JOIN comments ON comments.article_id = articles.article_id
+    GROUP BY articles.article_id`;
+  return db.query(queryText).then((articles) => articles.rows);
+};
+
 exports.selectArticleById = (article_id) => {
   const queryText = `SELECT articles.*, COUNT(comments.article_id)::INT AS comment_count
     FROM articles
