@@ -4,7 +4,6 @@ const app = require("../app");
 const db = require("../db/connection");
 const seed = require("../db/seeds/seed");
 const testData = require("../db/data/test-data");
-const { convertTimestampToDate } = require("../db/helpers/utils");
 
 beforeEach(() => seed(testData));
 afterAll(() => {
@@ -37,7 +36,7 @@ describe("GET /api/articles/:article_id", () => {
       .get(`/api/articles/${article_id}`)
       .expect(400)
       .then(({ body }) => {
-        expect(body.msg).toEqual("Bad request, invalid data format");
+        expect(body.msg).toEqual("Bad request, invalid data");
       });
   });
   test("status 400: invalid data (article_id doesn't exist)", () => {
@@ -47,6 +46,64 @@ describe("GET /api/articles/:article_id", () => {
       .expect(400)
       .then(({ body }) => {
         expect(body.msg).toEqual("Bad request, that article doesn't exist");
+      });
+  });
+});
+
+describe("PATCH /api/articles/:article_id", () => {
+  test("status 200: returns the updated article object, with  positive vote adjustment", () => {
+    const voteAdjustment = { inc_votes: 1 };
+    const article_id = 1;
+    return request(app)
+      .patch("/api/articles/1")
+      .send(voteAdjustment)
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.updatedArticle.votes).toEqual(101);
+      });
+  });
+  test("status 200: returns the updated article object, with negative vote adjustment", () => {
+    const voteAdjustment = { inc_votes: -100 };
+    const article_id = 1;
+    return request(app)
+      .patch(`/api/articles/${article_id}`)
+      .send(voteAdjustment)
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.updatedArticle.votes).toEqual(0);
+      });
+  });
+  test("status 400: incorrect data format (vote adjustment isn't a number)", () => {
+    const voteAdjustment = { inc_votes: "one thousand" };
+    const article_id = 1;
+    return request(app)
+      .patch(`/api/articles/${article_id}`)
+      .send(voteAdjustment)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toEqual("Bad request, invalid data");
+      });
+  });
+  test("status 400: invalid data (article_id doesn't exist)", () => {
+    const voteAdjustment = { inc_votes: 10 };
+    const article_id = 99999;
+    return request(app)
+      .patch(`/api/articles/${article_id}`)
+      .send(voteAdjustment)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toEqual("Bad request, that article doesn't exist");
+      });
+  });
+  test("status 400: missing data (request body doesn't include vote adjustment)", () => {
+    const voteAdjustment = { topic: "cooking" };
+    const article_id = 1;
+    return request(app)
+      .patch(`/api/articles/${article_id}`)
+      .send(voteAdjustment)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toEqual("Bad request, missing data");
       });
   });
 });
