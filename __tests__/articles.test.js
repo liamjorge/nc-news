@@ -55,7 +55,7 @@ describe("PATCH /api/articles/:article_id", () => {
     const voteAdjustment = { inc_votes: 1 };
     const article_id = 1;
     return request(app)
-      .patch("/api/articles/1")
+      .patch(`/api/articles/${article_id}`)
       .send(voteAdjustment)
       .expect(200)
       .then(({ body }) => {
