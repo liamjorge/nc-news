@@ -2,7 +2,7 @@ const express = require("express");
 const { getTopics } = require("./controllers/topics");
 const { getArticleById, patchArticleVotes } = require("./controllers/articles");
 const {
-  handleRouteNotFoundErrors,
+  handleRouteNotFound,
   handlePsqlErrors,
   handleCustomErrors,
   handleInternalServerErrors,
@@ -19,7 +19,7 @@ app.get("/api/articles/:article_id", getArticleById);
 app.patch("/api/articles/:article_id", patchArticleVotes);
 
 // error handling
-app.use("/*", handleRouteNotFoundErrors);
+app.use("/*", handleRouteNotFound);
 app.use(handlePsqlErrors);
 app.use(handleCustomErrors);
 app.use(handleInternalServerErrors);

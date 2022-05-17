@@ -1,4 +1,4 @@
-exports.handleRouteNotFoundErrors = (req, res, next) => {
+exports.handleRouteNotFound = (req, res, next) => {
   res.status(404).send({ msg: "Route not found" });
   next();
 };
