@@ -1,4 +1,3 @@
-const { query_timeout } = require("pg/lib/defaults");
 const db = require("../db/connection");
 
 exports.selectArticleById = (article_id) => {
