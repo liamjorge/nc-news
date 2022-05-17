@@ -1,7 +1,12 @@
+const { query_timeout } = require("pg/lib/defaults");
 const db = require("../db/connection");
 
 exports.selectArticleById = (article_id) => {
-  const queryText = `SELECT * FROM articles WHERE article_id=$1`;
+  const queryText = `SELECT articles.*, COUNT(comments.article_id)::INT AS comment_count
+    FROM articles
+    JOIN comments ON comments.article_id = articles.article_id
+    GROUP BY articles.article_id
+    HAVING articles.article_id=$1`;
   const queryVals = [article_id];
 
   return db.query(queryText, queryVals).then((article) => {
