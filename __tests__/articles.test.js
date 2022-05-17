@@ -26,7 +26,7 @@ describe("GET /api/articles", () => {
             author: expect.any(String),
             body: expect.any(String),
             created_at: expect.stringMatching(
-              /\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}[A-Z]$/
+              /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}[A-Z]$/
             ),
             votes: expect.any(Number),
             comment_count: expect.any(Number),
