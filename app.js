@@ -7,6 +7,7 @@ const {
   handleCustomErrors,
   handleInternalServerErrors,
 } = require("./controllers/errors");
+const { getUsers } = require("./controllers/users");
 
 const app = express();
 app.use(express.json());
@@ -17,6 +18,9 @@ app.get("/api/topics", getTopics);
 // articles
 app.get("/api/articles/:article_id", getArticleById);
 app.patch("/api/articles/:article_id", patchArticleVotes);
+
+// users
+app.get("/api/users", getUsers);
 
 // error handling
 app.use("/*", handleRouteNotFound);
