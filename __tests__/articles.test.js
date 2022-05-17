@@ -1,4 +1,5 @@
 const request = require("supertest");
+require("jest-sorted");
 
 const app = require("../app");
 const db = require("../db/connection");
@@ -24,7 +25,6 @@ describe("GET /api/articles", () => {
             title: expect.any(String),
             topic: expect.any(String),
             author: expect.any(String),
-            body: expect.any(String),
             created_at: expect.stringMatching(
               /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}[A-Z]$/
             ),
@@ -41,6 +41,15 @@ describe("GET /api/articles", () => {
       .expect(404)
       .then(({ body }) => {
         expect(body.msg).toEqual("Route not found");
+      });
+  });
+
+  test("status 200: response array is sorted by date in descending order", () => {
+    return request(app)
+      .get("/api/articles")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.articles).toBeSortedBy("created_at", { descending: true });
       });
   });
 });
