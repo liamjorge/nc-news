@@ -1,12 +1,46 @@
 const db = require("../db/connection");
 
-exports.selectArticles = () => {
-  const queryText = `SELECT articles.article_id, articles.title, articles.topic, articles.author, articles.created_at, articles.votes, COUNT(comments.article_id)::INT AS comment_count
+exports.selectArticles = (sort_by = "created_at", order = "desc", topic) => {
+  const validSortBy = [
+    "article_id",
+    "title",
+    "topic",
+    "author",
+    "body",
+    "created_at",
+    "votes",
+  ];
+  const validOrder = ["asc", "desc"];
+  const queryVals = [];
+  let queryText = `SELECT articles.article_id, articles.title, articles.topic, articles.author, articles.created_at, articles.votes, COUNT(comments.article_id)::INT AS comment_count
     FROM articles
     LEFT JOIN comments ON comments.article_id = articles.article_id
-    GROUP BY articles.article_id
-    ORDER BY articles.created_at DESC`;
-  return db.query(queryText).then((articles) => articles.rows);
+    GROUP BY articles.article_id `;
+
+  if (topic) {
+    queryText += `HAVING articles.topic = $1 `;
+    queryVals.push(topic);
+  }
+
+  if (validSortBy.includes(sort_by)) {
+    queryText += `ORDER BY articles.${sort_by} `;
+  } else {
+    return Promise.reject({ status: 400, msg: "Invalid sort_by query" });
+  }
+
+  if (validOrder.includes(order)) {
+    queryText += `${order}`;
+  } else {
+    return Promise.reject({ status: 400, msg: "Invalid order query" });
+  }
+
+  return db.query(queryText, queryVals).then((articles) => {
+    if (articles.rows.length === 0) {
+      return Promise.reject({ status: 400, msg: "Invalid topic query" });
+    } else {
+      return articles.rows;
+    }
+  });
 };
 
 exports.selectArticleById = (article_id) => {

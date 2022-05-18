@@ -44,12 +44,67 @@ describe("GET /api/articles", () => {
       });
   });
 
-  test("status 200: response array is sorted by date in descending order", () => {
+  test("status 200: default response is sorted by date in descending order", () => {
     return request(app)
       .get("/api/articles")
       .expect(200)
       .then(({ body }) => {
         expect(body.articles).toBeSortedBy("created_at", { descending: true });
+      });
+  });
+  test("status 200: accepts sort_by and order query strings", () => {
+    return request(app)
+      .get("/api/articles?sort_by=title&order=asc")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.articles).toBeSortedBy("title", { descending: false });
+      });
+  });
+  test("status 200: accepts topic query string", () => {
+    return request(app)
+      .get("/api/articles?topic=mitch")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.articles).toHaveLength(11);
+        body.articles.forEach((article) => {
+          expect(article.topic).toEqual("mitch");
+        });
+      });
+  });
+  test("status 200: accepts sort_by, order and topic query strings together", () => {
+    return request(app)
+      .get("/api/articles?sort_by=title&order=asc&topic=mitch")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.articles).toHaveLength(11);
+        expect(body.articles).toBeSortedBy("title", { descending: false });
+        body.articles.forEach((article) => {
+          expect(article.topic).toEqual("mitch");
+        });
+      });
+  });
+  test("status 404: invalid sort_by query string", () => {
+    return request(app)
+      .get("/api/articles?sort_by=bananas")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toEqual("Invalid sort_by query");
+      });
+  });
+  test("status 404: invalid order query string", () => {
+    return request(app)
+      .get("/api/articles?order=reverse")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toEqual("Invalid order query");
+      });
+  });
+  test("status 404: invalid topic query string", () => {
+    return request(app)
+      .get("/api/articles?topic=football")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toEqual("Invalid topic query");
       });
   });
 });
