@@ -8,6 +8,8 @@ exports.handlePsqlErrors = (err, req, res, next) => {
     res.status(400).send({ msg: "Bad request, invalid data" });
   } else if (err.code === "23502") {
     res.status(400).send({ msg: "Bad request, missing data" });
+  } else if (err.code === "23503") {
+    res.status(400).send({ msg: "Bad request, reference doesn't exist" });
   } else {
     next(err);
   }
