@@ -32,10 +32,16 @@ describe("GET /api/articles/:article_id/comments", () => {
         });
       });
   });
-  
+
   test("status 204: no content, when the selected article has no comments)", () => {
     const article_id = 2;
-    return request(app).get(`/api/articles/${article_id}/comments`).expect(204);
+    return request(app)
+      .get(`/api/articles/${article_id}/comments`)
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.comments).toBeInstanceOf(Array);
+        expect(body.comments).toHaveLength(0);
+      });
   });
 
   test("status 400: incorrect data format (article_id isn't a number)", () => {
