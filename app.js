@@ -5,13 +5,14 @@ const {
   getArticleById,
   patchArticleVotes,
 } = require("./controllers/articles");
+const { getUsers } = require("./controllers/users");
+const { getArticleComments } = require("./controllers/comments");
 const {
   handleRouteNotFound,
   handlePsqlErrors,
   handleCustomErrors,
   handleInternalServerErrors,
 } = require("./controllers/errors");
-const { getUsers } = require("./controllers/users");
 
 const app = express();
 app.use(express.json());
@@ -26,6 +27,9 @@ app.patch("/api/articles/:article_id", patchArticleVotes);
 
 // users
 app.get("/api/users", getUsers);
+
+// comments
+app.get("/api/articles/:article_id/comments", getArticleComments);
 
 // error handling
 app.use("/*", handleRouteNotFound);
