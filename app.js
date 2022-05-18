@@ -6,7 +6,10 @@ const {
   patchArticleVotes,
 } = require("./controllers/articles");
 const { getUsers } = require("./controllers/users");
-const { getArticleComments } = require("./controllers/comments");
+const {
+  getArticleComments,
+  postArticleComment,
+} = require("./controllers/comments");
 const {
   handleRouteNotFound,
   handlePsqlErrors,
@@ -30,6 +33,7 @@ app.get("/api/users", getUsers);
 
 // comments
 app.get("/api/articles/:article_id/comments", getArticleComments);
+app.post("/api/articles/:article_id/comments", postArticleComment);
 
 // error handling
 app.use("/*", handleRouteNotFound);
