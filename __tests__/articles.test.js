@@ -83,7 +83,7 @@ describe("GET /api/articles", () => {
         });
       });
   });
-  test("status 404: invalid sort_by query string", () => {
+  test("status 400: invalid sort_by query string", () => {
     return request(app)
       .get("/api/articles?sort_by=bananas")
       .expect(400)
@@ -91,7 +91,7 @@ describe("GET /api/articles", () => {
         expect(body.msg).toEqual("Invalid sort_by query");
       });
   });
-  test("status 404: invalid order query string", () => {
+  test("status 400: invalid order query string", () => {
     return request(app)
       .get("/api/articles?order=reverse")
       .expect(400)
@@ -99,7 +99,7 @@ describe("GET /api/articles", () => {
         expect(body.msg).toEqual("Invalid order query");
       });
   });
-  test("status 404: invalid topic query string", () => {
+  test("status 400: invalid topic query string", () => {
     return request(app)
       .get("/api/articles?topic=football")
       .expect(400)
