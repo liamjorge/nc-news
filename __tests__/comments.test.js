@@ -33,7 +33,7 @@ describe("GET /api/articles/:article_id/comments", () => {
       });
   });
 
-  test("status 204: no content, when the selected article has no comments)", () => {
+  test("status 200: returns an empty array, when the selected article has no comments)", () => {
     const article_id = 2;
     return request(app)
       .get(`/api/articles/${article_id}/comments`)
