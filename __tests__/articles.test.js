@@ -99,12 +99,29 @@ describe("GET /api/articles", () => {
         expect(body.msg).toEqual("Invalid order query");
       });
   });
+  test("status 400: invalid topic query string", () => {
+    return request(app)
+      .get("/api/articles?topic=99999")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toEqual("Invalid topic query");
+      });
+  });
   test("status 404: topic doesn't exist", () => {
     return request(app)
       .get("/api/articles?topic=football")
       .expect(404)
       .then(({ body }) => {
         expect(body.msg).toEqual("That topic doesn't exist");
+      });
+  });
+  test("status 200: with an empty array, when pass an existing topic that doesn't have any articles", () => {
+    return request(app)
+      .get("/api/articles?topic=paper")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.articles).toBeInstanceOf(Array);
+        expect(body.articles).toHaveLength(0);
       });
   });
 });
