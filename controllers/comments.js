@@ -1,6 +1,7 @@
 const {
   selectArticleComments,
   addArticleComment,
+  removeCommentById,
 } = require("../models/comments");
 const { selectArticleById } = require("../models/articles");
 
@@ -32,5 +33,13 @@ exports.postArticleComment = (req, res, next) => {
     .then(([_, comment]) => {
       res.status(201).send({ comment });
     })
+    .catch(next);
+};
+
+exports.deleteCommentById = (req, res, next) => {
+  const { comment_id } = req.params;
+
+  removeCommentById(comment_id)
+    .then(() => res.status(204).send())
     .catch(next);
 };
