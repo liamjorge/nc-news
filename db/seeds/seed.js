@@ -3,7 +3,7 @@ const {
   convertTimestampToDate,
   createRef,
   formatComments,
-} = require("../helpers/utils");
+} = require("../..//utils/db");
 const db = require("../connection");
 const { dropTables, createTables } = require("../helpers/manage-tables");
 
