@@ -28,7 +28,7 @@ exports.selectArticles = (sort_by = "created_at", order = "desc", topic) => {
     return Promise.reject({ status: 400, msg: "Invalid sort_by query" });
   }
 
-  if (validOrder.includes(order)) {
+  if (validOrder.includes(order.toLowerCase())) {
     queryText += `${order}`;
   } else {
     return Promise.reject({ status: 400, msg: "Invalid order query" });
