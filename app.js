@@ -9,6 +9,7 @@ const { getUsers } = require("./controllers/users");
 const {
   getArticleComments,
   postArticleComment,
+  deleteCommentById,
 } = require("./controllers/comments");
 const {
   handleRouteNotFound,
@@ -34,6 +35,7 @@ app.get("/api/users", getUsers);
 // comments
 app.get("/api/articles/:article_id/comments", getArticleComments);
 app.post("/api/articles/:article_id/comments", postArticleComment);
+app.delete("/api/comments/:comment_id", deleteCommentById);
 
 // error handling
 app.use("/*", handleRouteNotFound);
