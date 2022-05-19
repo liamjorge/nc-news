@@ -1,4 +1,9 @@
 const db = require("../db/connection");
+const {
+  sortByIsValid,
+  topicExists,
+  topicIsValid,
+} = require("../utils/articles");
 
 exports.selectArticles = async (
   sort_by = "created_at",
@@ -10,23 +15,6 @@ exports.selectArticles = async (
     FROM articles
     LEFT JOIN comments ON comments.article_id = articles.article_id
     GROUP BY articles.article_id `;
-
-  const sortByIsValid = async (sort_by) => {
-    const { rows } = await db.query(
-      `SELECT ARRAY(SELECT column_name FROM information_schema.columns WHERE table_name = 'articles')`
-    );
-    return rows[0].array.includes(sort_by.toLowerCase());
-  };
-
-  const topicExists = async (topic) => {
-    const { rows } = await db.query(`SELECT ARRAY(SELECT slug FROM topics)`);
-    return rows[0].array.includes(topic.toLowerCase());
-  };
-
-  const topicIsValid = (topic) => {
-    const regex = /^\d+$/;
-    return !regex.test(topic);
-  };
 
   if (topic) {
     if (!topicIsValid(topic)) {
