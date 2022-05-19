@@ -3,6 +3,11 @@ const {
   createRef,
   formatComments,
 } = require("../utils/db");
+const {
+  sortByIsValid,
+  topicExists,
+  topicIsValid,
+} = require("../utils/articles");
 
 describe("convertTimestampToDate", () => {
   test("returns a new object", () => {
@@ -102,3 +107,48 @@ describe("formatComments", () => {
     expect(formattedComments[0].created_at).toEqual(new Date(timestamp));
   });
 });
+
+// describe("sortByIsValid", () => {
+//   test("returns true, when passed a column name from the articles table in lower case", async () => {
+//     const columnName = "created_at";
+//     expect(await sortByIsValid(columnName)).toBe(true);
+//   });
+//   test("returns true, when passed a column name from the articles table in upper case", async () => {
+//     const columnName = "AUTHOR";
+//     expect(await sortByIsValid(columnName)).toBe(true);
+//   });
+//   test("returns false, when passed a column name that doesn't exist in the articles table", async () => {
+//     const columnName = "bananas";
+//     expect(await sortByIsValid(columnName)).toBe(false);
+//   });
+// });
+
+// describe("topicExists", () => {
+//   test("returns true, when passed a topic name that exists in the topics table", async () => {
+//     const topicName = "cats";
+//     expect(await topicExists(topicName)).toBe(true);
+//   });
+//   test("returns true, when passed a topic name that exists in the topics table in upper case", async () => {
+//     const topicName = "PAPER";
+//     expect(await topicExists(topicName)).toBe(true);
+//   });
+//   test("returns false, when passed a topic name that doesn't exist in the topics table", async () => {
+//     const topicName = "bananas";
+//     expect(await topicExists(topicName)).toBe(false);
+//   });
+// });
+
+// describe("topicIsValid", () => {
+//   test("returns true, when passed a string that isn't entirely made of numbers", () => {
+//     const topicName = "he1lo";
+//     expect(topicIsValid(topicName)).toBe(true);
+//   });
+//   test("returns false, when passed a string entirely made of numbers", () => {
+//     const topicName = "1234";
+//     expect(topicIsValid(topicName)).toBe(false);
+//   });
+//   test("returns false, when passed a number", () => {
+//     const topicName = 1234;
+//     expect(topicIsValid(topicName)).toBe(false);
+//   });
+// });
