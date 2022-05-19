@@ -1,12 +1,46 @@
 const db = require("../db/connection");
+const {
+  sortByIsValid,
+  topicExists,
+  topicIsValid,
+} = require("../utils/articles");
 
-exports.selectArticles = () => {
-  const queryText = `SELECT articles.article_id, articles.title, articles.topic, articles.author, articles.created_at, articles.votes, COUNT(comments.article_id)::INT AS comment_count
+exports.selectArticles = async (
+  sort_by = "created_at",
+  order = "desc",
+  topic
+) => {
+  let queryVals = [];
+  let queryText = `SELECT articles.article_id, articles.title, articles.topic, articles.author, articles.created_at, articles.votes, COUNT(comments.article_id)::INT AS comment_count
     FROM articles
     LEFT JOIN comments ON comments.article_id = articles.article_id
-    GROUP BY articles.article_id
-    ORDER BY articles.created_at DESC`;
-  return db.query(queryText).then((articles) => articles.rows);
+    GROUP BY articles.article_id `;
+
+  if (topic) {
+    if (!topicIsValid(topic)) {
+      return Promise.reject({ status: 400, msg: "Invalid topic query" });
+    } else if (await topicExists(topic)) {
+      queryText += `HAVING articles.topic = $1 `;
+      queryVals.push(topic);
+    } else {
+      return Promise.reject({ status: 404, msg: "That topic doesn't exist" });
+    }
+  }
+
+  if (await sortByIsValid(sort_by)) {
+    queryText += `ORDER BY articles.${sort_by} `;
+  } else {
+    return Promise.reject({ status: 400, msg: "Invalid sort_by query" });
+  }
+
+  if (["asc", "desc"].includes(order.toLowerCase())) {
+    queryText += `${order}`;
+  } else {
+    return Promise.reject({ status: 400, msg: "Invalid order query" });
+  }
+
+  const { rows } = await db.query(queryText, queryVals);
+  return rows;
 };
 
 exports.selectArticleById = (article_id) => {
