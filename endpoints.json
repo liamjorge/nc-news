@@ -15,13 +15,92 @@
     "exampleResponse": {
       "articles": [
         {
-          "title": "Seafood substitutions are increasing",
+          "article_id": 34,
+          "title": "The Notorious MSG’s Unlikely Formula For Success",
           "topic": "cooking",
-          "author": "weegembump",
-          "body": "Text from the article..",
-          "created_at": 1527695953341
+          "author": "grumpy19",
+          "created_at": "2020-11-22T11:13:00.000Z",
+          "votes": 0,
+          "comment_count": 11
         }
       ]
     }
+  },
+  "GET /api/articles/:article_id": {
+    "description": "serves an article object with the specified article_id",
+    "queries": [],
+    "exampleResponse": {
+      "article": {
+        "article_id": 1,
+        "title": "Running a Node App",
+        "topic": "coding",
+        "author": "jessjelly",
+        "body": "This is part two of a series on how to get up and running with Systemd and Node.js.",
+        "created_at": "2020-11-07T06:03:00.000Z",
+        "votes": 0,
+        "comment_count": 8
+      }
+    }
+  },
+  "PATCH /api/articles/:article_id": {
+    "description": "updates the article object with the specified article_id, with votes increased on decreased by the specified inc_votes amount",
+    "queries": [],
+    "exampleRequest": { "inc_votes": 100 },
+    "exampleResponse": {
+      "updatedArticle": {
+        "article_id": 1,
+        "title": "Running a Node App",
+        "topic": "coding",
+        "author": "jessjelly",
+        "body": "This is part two of a series on how to get up and running with Systemd and Node.js.",
+        "created_at": "2020-11-07T06:03:00.000Z",
+        "votes": 200
+      }
+    }
+  },
+  "GET /api/users": {
+    "descripton": "serves an array of objects containing all usernames",
+    "queries": [],
+    "exampleResponse": {
+      "users": [{ "username": "tickle122" }, { "username": "grumpy19" }]
+    }
+  },
+  "GET /api/articles/:article_id/comments": {
+    "description": "serves an array of comment objects with the specified article_id",
+    "queries": [],
+    "exampleResponse": {
+      "comments": [
+        {
+          "comment_id": 31,
+          "body": "Sit sequi odio suscipit. Iure quisquam qui alias distinctio eos officia enim aut sit.",
+          "article_id": 1,
+          "author": "weegembump",
+          "votes": 11,
+          "created_at": "2020-09-26T16:16:00.000Z"
+        }
+      ]
+    }
+  },
+  "POST /api/articles/:article_id/comments": {
+    "description": "posts a new comment object with the specified article_id",
+    "queries": [],
+    "exampleRequest": {
+      "username": "weegembump",
+      "body": "this is a test comment"
+    },
+    "exampleResponse": {
+      "comment": {
+        "comment_id": 305,
+        "body": "this is a test comment",
+        "article_id": 1,
+        "author": "weegembump",
+        "votes": 0,
+        "created_at": "2022-05-19T15:04:49.032Z"
+      }
+    }
+  },
+  "DELETE /api/comments/:comment_id": {
+    "description": "deletes the comment with the specified comment_id",
+    "queries": []
   }
 }
