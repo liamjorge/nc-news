@@ -169,3 +169,42 @@ describe("POST /api/articles/:article_id/comments", () => {
       });
   });
 });
+
+describe("DELETE /api/comments/:comment_id", () => {
+  test("status 204: no content", () => {
+    const comment_id = 1;
+
+    return request(app)
+      .delete(`/api/comments/${comment_id}`)
+      .expect(204)
+      .then(() => {
+        return db.query(`SELECT * FROM comments`);
+      })
+      .then((comments) => {
+        expect(comments.rows).toHaveLength(17);
+        comments.rows.forEach(() => {
+          expect.not.objectContaining({ comment_id });
+        });
+      });
+  });
+  test("status 400: incorrect data format (comment_id isn't a number)", () => {
+    const comment_id = "apple";
+
+    return request(app)
+      .delete(`/api/comments/${comment_id}`)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toEqual("Bad request, invalid data");
+      });
+  });
+  test("status 404: comment_id doesn't exist", () => {
+    const comment_id = 999;
+
+    return request(app)
+      .delete(`/api/comments/${comment_id}`)
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toEqual("That comment doesn't exist");
+      });
+  });
+});
