@@ -99,12 +99,12 @@ describe("GET /api/articles", () => {
         expect(body.msg).toEqual("Invalid order query");
       });
   });
-  test("status 400: invalid topic query string", () => {
+  test("status 404: topic doesn't exist", () => {
     return request(app)
       .get("/api/articles?topic=football")
-      .expect(400)
+      .expect(404)
       .then(({ body }) => {
-        expect(body.msg).toEqual("Invalid topic query");
+        expect(body.msg).toEqual("That topic doesn't exist");
       });
   });
 });
