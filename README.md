@@ -54,7 +54,7 @@ This section describes how to run a copy of the project locally for development 
    npm start
    ```
 
-6. View available API endpoints at [http://localhost:9090/api](http://localhost:9090/api)
+6. View available API endpoints at [https://liamjorge-nc-news.herokuapp.com/api](https://liamjorge-nc-news.herokuapp.com/api)
 
 # 🧪 Running tests
 
@@ -79,23 +79,3 @@ This section describes how to run a copy of the project locally for development 
 
 - `git commit` triggers a husky workflow which runs all unit and integration tests
 - `git push origin main` triggers a GitHub actions workflow which runs all unit and integration tests and then deploys to Heroku
-
-# 🛠 Dependencies
-
-| package                                              | description              |
-| ---------------------------------------------------- | ------------------------ |
-| [express](https://www.npmjs.com/package/express)     | web framework            |
-| [dotenv](https://www.npmjs.com/package/dotenv)       | loading env variables    |
-| [pg](https://www.npmjs.com/package/pg)               | postgres client for node |
-| [pg-format](https://www.npmjs.com/package/pg-format) | dynamic psql queries     |
-
-## 🤓 Dev dependencies
-
-| package                                                      | description                  |
-| ------------------------------------------------------------ | ---------------------------- |
-| [jest](https://www.npmjs.com/package/jest)                   | javascript testing framework |
-| [jest-extended](https://www.npmjs.com/package/jest-extended) | additional matchers for jest |
-| [jest-sorted](https://www.npmjs.com/package/jest-sorted)     | additional matchers for jest |
-| [supertest](https://www.npmjs.com/package/supertest)         | api endpoint testing         |
-| [husky](https://www.npmjs.com/package/husky)                 | pre-commit git hooks         |
-| [nodemon](https://www.npmjs.com/package/nodemon)             | local server auto-reloads    |
