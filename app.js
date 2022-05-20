@@ -11,6 +11,7 @@ const {
   postArticleComment,
   deleteCommentById,
 } = require("./controllers/comments");
+const { getEndpoints } = require("./controllers/endpoints");
 const {
   handleRouteNotFound,
   handlePsqlErrors,
@@ -20,6 +21,9 @@ const {
 
 const app = express();
 app.use(express.json());
+
+//endpoints
+app.get("/api", getEndpoints);
 
 // topics
 app.get("/api/topics", getTopics);
