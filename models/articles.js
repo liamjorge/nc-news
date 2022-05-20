@@ -1,9 +1,6 @@
 const db = require("../db/connection");
-const {
-  sortByIsValid,
-  topicExists,
-  topicIsValid,
-} = require("../utils/articles");
+const { sortByIsValid, topicExists } = require("../helpers/validators");
+const { topicIsValid } = require("../utils/formatters");
 
 exports.selectArticles = async (
   sort_by = "created_at",

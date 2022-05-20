@@ -11,8 +11,3 @@ exports.topicExists = async (topic) => {
   const { rows } = await db.query(`SELECT ARRAY(SELECT slug FROM topics)`);
   return rows[0].array.includes(topic.toLowerCase());
 };
-
-exports.topicIsValid = (topic) => {
-  const regex = /^\d+$/;
-  return !regex.test(topic);
-};

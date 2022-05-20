@@ -3,9 +3,9 @@ const {
   convertTimestampToDate,
   createRef,
   formatComments,
-} = require("../..//utils/db");
+} = require("../../utils/formatters");
 const db = require("../connection");
-const { dropTables, createTables } = require("../helpers/manage-tables");
+const { dropTables, createTables } = require("../../helpers/manage-tables");
 
 const seed = async ({ topicData, userData, articleData, commentData }) => {
   await dropTables();

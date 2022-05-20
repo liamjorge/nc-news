@@ -1,5 +1,5 @@
 const request = require("supertest");
-const app = require("../app");
+const app = require("../../../app");
 
 describe("GET /api/articles", () => {
   test("status 200: with a json object containing all endpoints, each with a description", () => {

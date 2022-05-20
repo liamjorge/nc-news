@@ -20,3 +20,8 @@ exports.formatComments = (comments, idLookup) => {
     };
   });
 };
+
+exports.topicIsValid = (topic) => {
+  const regex = /^\d+$/;
+  return !regex.test(topic);
+};
