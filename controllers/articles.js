@@ -4,33 +4,36 @@ const {
   updateArticleVotes,
 } = require("../models/articles");
 
-exports.getArticles = (req, res, next) => {
+exports.getArticles = async (req, res, next) => {
   const { sort_by, order, topic } = req.query;
 
-  selectArticles(sort_by, order, topic)
-    .then((articles) => {
-      res.status(200).send({ articles });
-    })
-    .catch(next);
+  try {
+    const articles = await selectArticles(sort_by, order, topic);
+    res.status(200).send({ articles });
+  } catch (err) {
+    next(err);
+  }
 };
 
-exports.getArticleById = (req, res, next) => {
+exports.getArticleById = async (req, res, next) => {
   const { article_id } = req.params;
 
-  selectArticleById(article_id)
-    .then((article) => {
-      res.status(200).send({ article });
-    })
-    .catch(next);
+  try {
+    const article = await selectArticleById(article_id);
+    res.status(200).send({ article });
+  } catch (err) {
+    next(err);
+  }
 };
 
-exports.patchArticleVotes = (req, res, next) => {
+exports.patchArticleVotes = async (req, res, next) => {
   const { article_id } = req.params;
   const { inc_votes } = req.body;
 
-  updateArticleVotes(article_id, inc_votes)
-    .then((updatedArticle) => {
-      res.status(200).send({ updatedArticle });
-    })
-    .catch(next);
+  try {
+    const updatedArticle = await updateArticleVotes(article_id, inc_votes);
+    res.status(200).send({ updatedArticle });
+  } catch (err) {
+    next(err);
+  }
 };

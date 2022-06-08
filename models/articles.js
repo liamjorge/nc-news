@@ -40,40 +40,36 @@ exports.selectArticles = async (
   return rows;
 };
 
-exports.selectArticleById = (article_id) => {
+
+exports.selectArticleById = async (article_id) => {
   const queryText = `SELECT articles.*, COUNT(comments.article_id)::INT AS comment_count
     FROM articles
     LEFT JOIN comments ON comments.article_id = articles.article_id
     GROUP BY articles.article_id
     HAVING articles.article_id=$1`;
   const queryVals = [article_id];
+  const article = await db.query(queryText, queryVals);
 
-  return db.query(queryText, queryVals).then((article) => {
-    if (article.rows.length === 0) {
-      return Promise.reject({
+  return article.rows.length === 0
+    ? Promise.reject({
         status: 400,
         msg: "Bad request, that article doesn't exist",
-      });
-    } else {
-      return article.rows[0];
-    }
-  });
+      })
+    : article.rows[0];
 };
 
-exports.updateArticleVotes = (article_id, inc_votes) => {
+exports.updateArticleVotes = async (article_id, inc_votes) => {
   const queryText = `UPDATE articles
     SET votes = votes + $1
     WHERE article_id = $2
     RETURNING *`;
   const queryVals = [inc_votes, article_id];
+  const updatedArticle = await db.query(queryText, queryVals);
 
-  return db.query(queryText, queryVals).then((updatedArticle) => {
-    if (updatedArticle.rows.length === 0) {
-      return Promise.reject({
+  return updatedArticle.rows.length === 0
+    ? Promise.reject({
         status: 400,
         msg: "Bad request, that article doesn't exist",
-      });
-    }
-    return updatedArticle.rows[0];
-  });
+      })
+    : updatedArticle.rows[0];
 };
