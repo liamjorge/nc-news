@@ -52,6 +52,14 @@ describe("GET /api/articles", () => {
     expect(body.articles).toBeSortedBy("title", { descending: false });
   });
 
+  test("status 200: accepts sort_by comment_count", async () => {
+    const { body } = await request(app)
+      .get("/api/articles?sort_by=comment_count")
+      .expect(200);
+
+    expect(body.articles).toBeSortedBy("comment_count", { descending: true });
+  });
+
   test("status 200: accepts topic query string", async () => {
     const { body } = await request(app)
       .get("/api/articles?topic=mitch")
