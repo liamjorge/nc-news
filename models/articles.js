@@ -8,7 +8,7 @@ exports.selectArticles = async (
   topic
 ) => {
   let queryVals = [];
-  let queryText = `SELECT articles.article_id, articles.title, articles.topic, articles.author, articles.created_at, articles.votes, COUNT(comments.article_id)::INT AS comment_count
+  let queryText = `SELECT articles.article_id, articles.title, articles.topic, articles.author, articles.created_at, articles.votes, COUNT (comments.article_id)::INT AS comment_count
     FROM articles
     LEFT JOIN comments ON comments.article_id = articles.article_id
     GROUP BY articles.article_id `;
@@ -25,7 +25,7 @@ exports.selectArticles = async (
   }
 
   if (await sortByIsValid(sort_by)) {
-    queryText += `ORDER BY articles.${sort_by} `;
+    queryText += `ORDER BY ${sort_by} `;
   } else {
     return Promise.reject({ status: 400, msg: "Invalid sort_by query" });
   }
@@ -40,9 +40,8 @@ exports.selectArticles = async (
   return rows;
 };
 
-
 exports.selectArticleById = async (article_id) => {
-  const queryText = `SELECT articles.*, COUNT(comments.article_id)::INT AS comment_count
+  const queryText = `SELECT articles.*, COUNT (comments.article_id)::INT AS comment_count
     FROM articles
     LEFT JOIN comments ON comments.article_id = articles.article_id
     GROUP BY articles.article_id

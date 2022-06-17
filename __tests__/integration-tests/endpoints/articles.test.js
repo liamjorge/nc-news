@@ -5,7 +5,6 @@ const app = require("../../../app");
 const db = require("../../../db/connection");
 const seed = require("../../../db/seeds/seed");
 const testData = require("../../../db/data/test-data");
-const { startSession } = require("pg/lib/sasl");
 
 beforeEach(() => seed(testData));
 afterAll(() => {
